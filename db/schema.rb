@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20160215164222) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "friend_requests", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
@@ -21,16 +24,16 @@ ActiveRecord::Schema.define(version: 20160215164222) do
     t.datetime "updated_at",                     null: false
   end
 
-  add_index "friend_requests", ["friend_id"], name: "index_friend_requests_on_friend_id"
-  add_index "friend_requests", ["user_id"], name: "index_friend_requests_on_user_id"
+  add_index "friend_requests", ["friend_id"], name: "index_friend_requests_on_friend_id", using: :btree
+  add_index "friend_requests", ["user_id"], name: "index_friend_requests_on_user_id", using: :btree
 
   create_table "friends_users", id: false, force: :cascade do |t|
     t.integer "friend_id", null: false
     t.integer "user_id",   null: false
   end
 
-  add_index "friends_users", ["friend_id", "user_id"], name: "index_friends_users_on_friend_id_and_user_id"
-  add_index "friends_users", ["user_id", "friend_id"], name: "index_friends_users_on_user_id_and_friend_id"
+  add_index "friends_users", ["friend_id", "user_id"], name: "index_friends_users_on_friend_id_and_user_id", using: :btree
+  add_index "friends_users", ["user_id", "friend_id"], name: "index_friends_users_on_user_id_and_friend_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
@@ -38,4 +41,5 @@ ActiveRecord::Schema.define(version: 20160215164222) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "friend_requests", "users"
 end
